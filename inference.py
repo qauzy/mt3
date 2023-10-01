@@ -15,7 +15,7 @@ import note_seq
 
 class InferenceHandler:
 
-    def __init__(self, weight_path, device=torch.device('cuda')) -> None:
+    def __init__(self, weight_path, device=torch.device('mps')) -> None:
         config_path = f'{weight_path}/config.json'
         weight_path = f'{weight_path}/mt3.pth'
         with open(config_path) as f:
