@@ -2,7 +2,7 @@ from glob import glob
 import yaml
 import json
 
-from contrib.preprocessor import _SLAKH_CLASS_PROGRAMS
+from mt3.contrib.preprocessor import _SLAKH_CLASS_PROGRAMS
 
 _SLAKH_CLASS_PROGRAMS
 

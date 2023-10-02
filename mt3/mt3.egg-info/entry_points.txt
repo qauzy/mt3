@@ -1,0 +1,2 @@
+[console_scripts]
+mt3 = mt3.__main__:main

@@ -19,7 +19,7 @@ import functools
 
 from typing import Any, Callable, Mapping, Optional, Sequence, Tuple, TypeVar
 
-from contrib import event_codec, note_sequences, run_length_encoding
+from mt3.contrib import event_codec, note_sequences, run_length_encoding
 
 import note_seq
 import numpy as np

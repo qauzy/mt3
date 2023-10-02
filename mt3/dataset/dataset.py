@@ -10,8 +10,8 @@ import numpy as np
 import librosa
 import note_seq
 from glob import glob
-from contrib import event_codec, note_sequences, spectrograms, vocabularies, run_length_encoding
-from contrib.preprocessor import slakh_class_to_program_and_is_drum, add_track_to_notesequence, PitchBendError
+from mt3.contrib import event_codec, note_sequences, spectrograms, vocabularies, run_length_encoding
+from mt3.contrib.preprocessor import slakh_class_to_program_and_is_drum, add_track_to_notesequence, PitchBendError
 
 
 class MidiMixIterDataset(IterableDataset):

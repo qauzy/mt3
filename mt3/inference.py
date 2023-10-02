@@ -7,11 +7,11 @@ from typing import List
 
 import numpy as np
 from tqdm import tqdm
-from models.t5 import T5ForConditionalGeneration, T5Config
+from mt3.models.t5 import T5ForConditionalGeneration, T5Config
 import torch.nn as nn
 import torch
 import librosa
-from contrib import spectrograms, vocabularies, note_sequences, metrics_utils
+from mt3.contrib import spectrograms, vocabularies, note_sequences, metrics_utils
 import note_seq
 
 class TQDMOutput(StringIO):
@@ -121,7 +121,6 @@ class InferenceHandler:
 
     # TODO Force generate using subset of instrument instead of all.
     def stopProc(self):
-        print('==============stopProc===============')
         self.stop_flag = True
     def inference(self, audio_path, outpath=None, text_edit=None, valid_programs=None, num_beams=1):
 
@@ -138,7 +137,7 @@ class InferenceHandler:
             tqdm_out = TQDMOutput(text_edit)
         for batch in tqdm(inputs_tensor,file=tqdm_out):
             if self.stop_flag:
-                return
+                return False
             batch = batch.to(self.device)
             result = self.model.generate(inputs=batch, max_length=1024, num_beams=num_beams, do_sample=False,
                                          length_penalty=0.4, eos_token_id=self.model.config.eos_token_id, early_stopping=False, bad_words_ids=invalid_programs)

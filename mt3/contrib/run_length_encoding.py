@@ -18,7 +18,7 @@ import dataclasses
 from typing import Any, Callable, Tuple, Optional, Sequence, TypeVar
 
 from absl import logging
-from contrib import event_codec
+from mt3.contrib import event_codec
 
 import numpy as np
 

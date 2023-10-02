@@ -18,7 +18,7 @@ import dataclasses
 import itertools
 
 from typing import MutableMapping, MutableSet, Optional, Sequence, Tuple
-from contrib import event_codec, vocabularies, run_length_encoding
+from mt3.contrib import event_codec, vocabularies, run_length_encoding
 import note_seq
 
 DEFAULT_VELOCITY = 100

@@ -18,7 +18,7 @@ import dataclasses
 import math
 
 from typing import Optional, Sequence
-from contrib import event_codec
+from mt3.contrib import event_codec
 
 import note_seq
 import t5.data
