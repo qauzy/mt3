@@ -1,8 +1,9 @@
 transformers==4.23.0
 torch
 librosa==0.9.1
-ddsp==3.3.4
+# ddsp==3.3.4
 t5==0.9.3
 note-seq==0.0.3
 pretty-midi==0.2.9
 einops==0.4.1
+PyQt6

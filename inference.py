@@ -1,6 +1,8 @@
 import json
 import math
 import os
+import sys
+from io import StringIO
 from typing import List
 
 import numpy as np
@@ -11,6 +13,15 @@ import torch
 import librosa
 from contrib import spectrograms, vocabularies, note_sequences, metrics_utils
 import note_seq
+
+class TQDMOutput(StringIO):
+    def __init__(self, text_edit):
+        super().__init__()
+        self.text_edit = text_edit
+
+    def write(self, text):
+        self.text_edit.insertPlainText(text)
+        self.text_edit.verticalScrollBar().setValue(self.text_edit.verticalScrollBar().maximum())
 
 
 class InferenceHandler:
@@ -33,6 +44,7 @@ class InferenceHandler:
         self.device = device
         self.model = model
         self.model.to(self.device)
+        self.stop_flag =  False
 
     def _audio_to_frames(self, audio):
         """Compute spectrogram frames from audio."""
@@ -108,8 +120,11 @@ class InferenceHandler:
         return [[p] for p in invalid_programs]
 
     # TODO Force generate using subset of instrument instead of all.
+    def stopProc(self):
+        print('==============stopProc===============')
+        self.stop_flag = True
+    def inference(self, audio_path, outpath=None, text_edit=None, valid_programs=None, num_beams=1):
 
-    def inference(self, audio_path, outpath=None, valid_programs=None, num_beams=1):
         audio, _ = librosa.load(audio_path, sr=self.SAMPLE_RATE)
         if valid_programs is not None:
             invalid_programs = self._get_program_ids(valid_programs)
@@ -119,12 +134,18 @@ class InferenceHandler:
         inputs_tensor = torch.from_numpy(inputs)
         results = []
         inputs_tensor, frame_times = self._batching(inputs_tensor, frame_times)
-        for batch in tqdm(inputs_tensor):
+        if text_edit is not None:
+            tqdm_out = TQDMOutput(text_edit)
+        for batch in tqdm(inputs_tensor,file=tqdm_out):
+            if self.stop_flag:
+                return
             batch = batch.to(self.device)
             result = self.model.generate(inputs=batch, max_length=1024, num_beams=num_beams, do_sample=False,
                                          length_penalty=0.4, eos_token_id=self.model.config.eos_token_id, early_stopping=False, bad_words_ids=invalid_programs)
             result = self._postprocess_batch(result)
             results.append(result)
+            if tqdm_out is not None:
+                tqdm_out.flush()
         event = self._to_event(results, frame_times)
         if outpath is None:
             filename = audio_path.split('/')[-1].split('.')[0]
