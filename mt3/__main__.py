@@ -67,7 +67,7 @@ class FileDialog(QMainWindow):
         # 创建水平布局用于放置文件路径编辑框和按钮
         file_layout = QHBoxLayout()
         homedir = str(pathlib.Path.home())
-        self.selected_file_edit = QLineEdit(homedir+'/Documents/暖暖(钢琴版) - 曹杰.mp3', self)
+        self.selected_file_edit = QLineEdit(homedir+'/Documents/Martian Love - In Motion.mp3', self)
         self.selected_file_edit.setReadOnly(True)  # 设置为只读
         file_layout.addWidget(self.selected_file_edit)
         self.button_file = QPushButton('选择音频路径', self)
@@ -124,7 +124,7 @@ class FileDialog(QMainWindow):
 
         file_dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)  # 允许选择现有文件
         file_dialog.setViewMode(QFileDialog.ViewMode.Detail)  # 显示详细信息
-
+        file_dialog.setDirectory(str(pathlib.Path.home()))
         file_names, _ = file_dialog.getOpenFileNames(self, '音频文件选择', '', 'All Files (*)')
         if file_names:
             selected_file = file_names[0]
@@ -136,7 +136,7 @@ class FileDialog(QMainWindow):
         folder_dialog = QFileDialog()
 
         folder_dialog.setFileMode(QFileDialog.FileMode.Directory)  # 允许选择文件夹
-
+        folder_dialog.setDirectory(str(pathlib.Path.home()))
         folder_path = folder_dialog.getExistingDirectory(self, '文件夹选择', '')
         if folder_path:
             self.selected_folder_edit.setText(folder_path)
